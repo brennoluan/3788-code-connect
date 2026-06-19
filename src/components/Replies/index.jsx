@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './replies.module.css';
 import { Comment } from '../Comment';
 import { ReplyModal } from '../ModalReply';
+import { useFetchReplies } from '@/app/hooks/useFetchReplies';
 
 export const Replies = ({ comment, slug }) => {
   const [showReplies, setShowReplies] = useState(false);
