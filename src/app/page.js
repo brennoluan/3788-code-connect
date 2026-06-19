@@ -1,17 +1,28 @@
-"use client";
+'use client';
 
-import { CardPost } from "@/components/CardPost";
-import { Spinner } from "@/components/Spinner";
-import styles from "./page.module.css";
-import Link from "next/link";
+import { CardPost } from '@/components/CardPost';
+import { Spinner } from '@/components/Spinner';
+import styles from './page.module.css';
+import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+
+const fetchPosts = async ({ page }) => {
+  const results = await fetch(`http://localhost:3000/api/posts?page=${page}`);
+  const data = await results.json();
+  return data;
+};
 
 export default function Home({ searchParams }) {
   const currentPage = parseInt(searchParams?.page || 1);
   const searchTerm = searchParams?.q;
 
+  const { data: posts } = useQuery({
+    queryKey: ['posts', currentPage],
+    queryFn: () => fetchPosts({ page: currentPage }),
+  });
+
   const isLoading = false;
   const isFetching = false;
-  const posts = [];
 
   const ratingsAndCartegoriesMap = null;
 
@@ -35,7 +46,7 @@ export default function Home({ searchParams }) {
         {posts?.prev && (
           <Link
             href={{
-              pathname: "/",
+              pathname: '/',
               query: { page: posts?.prev, q: searchTerm },
             }}
           >
@@ -45,7 +56,7 @@ export default function Home({ searchParams }) {
         {posts?.next && (
           <Link
             href={{
-              pathname: "/",
+              pathname: '/',
               query: { page: posts?.next, q: searchTerm },
             }}
           >
