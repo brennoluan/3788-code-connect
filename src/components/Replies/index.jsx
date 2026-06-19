@@ -1,14 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import styles from "./replies.module.css";
-import { Comment } from "../Comment";
-import { ReplyModal } from "../ModalReply";
+import { useState } from 'react';
+import styles from './replies.module.css';
+import { Comment } from '../Comment';
+import { ReplyModal } from '../ModalReply';
 
 export const Replies = ({ comment, slug }) => {
   const [showReplies, setShowReplies] = useState(false);
 
-  const replies = [];
+  const { data: replies } = useFetchReplies(
+    showReplies ? { commentId: comment.id, slug } : {},
+  );
 
   return (
     <div className={styles.container}>
@@ -17,7 +19,7 @@ export const Replies = ({ comment, slug }) => {
           className={styles.btn}
           onClick={() => setShowReplies(!showReplies)}
         >
-          {showReplies ? "Ocultar" : "Ver"} respostas
+          {showReplies ? 'Ocultar' : 'Ver'} respostas
         </button>
         {showReplies && replies?.length && (
           <ul>
